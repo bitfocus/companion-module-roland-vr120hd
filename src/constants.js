@@ -89,7 +89,7 @@ module.exports = {
 		{ id: 26, label: 'Still 15' },
 		{ id: 27, label: 'Still 16' },
 
-		{ id: 28, label: 'Video Player' },
+		{ id: 28, label: 'Video Player / SRT In' },
 		{ id: 29, label: 'Stream/Record Status 1' },
 		{ id: 30, label: 'Stream/Record Status 2' },
 		{ id: 31, label: 'Date & Time' },
@@ -127,7 +127,7 @@ module.exports = {
 		{ id: 26, label: 'Still 15' },
 		{ id: 27, label: 'Still 16' },
 
-		{ id: 28, label: 'Video Player' },
+		{ id: 28, label: 'Video Player / SRT In' },
 
 		{ id: 29, label: 'Input 1' },
 		{ id: 30, label: 'Input 2' },
@@ -137,6 +137,12 @@ module.exports = {
 		{ id: 34, label: 'Input 6' },
 		{ id: 35, label: 'Input 7' },
 		{ id: 36, label: 'Input 8' },
+	],
+
+	CHOICES_AUXES: [
+		{ id: '000011', label: 'Aux 1' },
+		{ id: '000024', label: 'Aux 2' },
+		{ id: '000025', label: 'Aux 3' },
 	],
 
 	CHOICES_OUTPUTS: [
@@ -155,10 +161,14 @@ module.exports = {
 		{ id: 0, label: 'Program' },
 		{ id: 1, label: 'Sub Program' },
 		{ id: 2, label: 'Preview' },
-		{ id: 3, label: 'Aux' },
-		{ id: 4, label: 'Multi-View' },
-		{ id: 5, label: 'Input-View' },
-		{ id: 6, label: 'Still-View' },
+		{ id: 3, label: 'Aux 1' },
+		{ id: 4, label: 'Aux 2' },
+		{ id: 5, label: 'Aux 3' },
+		{ id: 6, label: 'DSK 1' },
+		{ id: 7, label: 'DSK 2' },
+		{ id: 8, label: 'Multi-View' },
+		{ id: 9, label: 'Input-View' },
+		{ id: 10, label: 'Still-View' },
 	],
 
 	CHOICES_PINPDSK: [
@@ -245,7 +255,7 @@ module.exports = {
 		{ id: 26, label: 'Still 15' },
 		{ id: 27, label: 'Still 16' },
 
-		{ id: 28, label: 'Video Player' },
+		{ id: 28, label: 'Video Player / SRT In' },
 
 		{ id: 29, label: 'Input 1' },
 		{ id: 30, label: 'Input 2' },

@@ -97,6 +97,13 @@ module.exports = {
 			[
 				{
 					type: 'dropdown',
+					label: 'Aux',
+					id: 'aux',
+					default: self.CHOICES_AUXES[0].id,
+					choices: self.CHOICES_AUXES
+				},
+				{
+					type: 'dropdown',
 					label: 'Input Type',
 					id: 'assign',
 					default: self.CHOICES_INPUTSAUXASSIGN[0].id,
@@ -105,7 +112,7 @@ module.exports = {
 			],
 			callback: async function(action) {
 				let options = action.options;
-				let address = '00' + '00' + '11';
+				let address = options.aux;
 
 				let value = options.assign.toString(16).padStart(2, '0').toUpperCase();
 				self.sendCommand(address, value);

@@ -150,6 +150,38 @@ module.exports = {
 			}
 		};
 
+		actions.aux_pnpkey_enable = {
+			name: 'Aux PnP & Key Enable/Disable',
+			options:
+			[
+				{
+					type: 'dropdown',
+					label: 'Aux',
+					id: 'aux',
+					default: self.CHOICES_AUXES_PINPDSK[0].id,
+					choices: self.CHOICES_AUXES_PINPDSK
+				},
+				{
+					type: 'dropdown',
+					label: 'Enable/Disable',
+					id: 'enable',
+					default: 1,
+					choices: [
+						{ id: 0, label: 'Disable'},
+						{ id: 1, label: 'Enable'},
+						{ id: 2, label: 'Always On'}
+					]
+				}
+			],
+			callback: async function(action) {
+				let options = action.options;
+				let address = options.aux;
+
+				let value = options.enable.toString(16).padStart(2, '0').toUpperCase();
+				self.sendCommand(address, value);
+			}
+		};
+
 		actions.set_transition_type = {
 			name: 'Set Transition Type',
 			options:

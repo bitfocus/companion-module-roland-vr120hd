@@ -186,6 +186,27 @@ module.exports = {
 		{ id: 29, label: 'Sub Program Layer DSK 2' }
 	],
 
+	CHOICES_AUXES_PINPDSK: [
+		{ id: '00001E', label: 'Aux 1 PinP & Key 1' },
+		{ id: '00001F', label: 'Aux 1 PinP & Key 2' },
+		{ id: '000020', label: 'Aux 1 PinP & Key 3' },
+		{ id: '000021', label: 'Aux 1 PinP & Key 4' },
+		{ id: '000022', label: 'Aux 1 DSK 1' },
+		{ id: '000023', label: 'Aux 1 DSK 2' },
+		{ id: '000026', label: 'Aux 2 PinP & Key 1' },
+		{ id: '000027', label: 'Aux 2 PinP & Key 2' },
+		{ id: '000028', label: 'Aux 2 PinP & Key 3' },
+		{ id: '000029', label: 'Aux 2 PinP & Key 4' },
+		{ id: '00002A', label: 'Aux 2 DSK 1' },
+		{ id: '00002B', label: 'Aux 2 DSK 2' },
+		{ id: '00002C', label: 'Aux 3 PinP & Key 1' },
+		{ id: '00002D', label: 'Aux 3 PinP & Key 2' },
+		{ id: '00002E', label: 'Aux 3 PinP & Key 3' },
+		{ id: '00002F', label: 'Aux 3 PinP & Key 4' },
+		{ id: '000030', label: 'Aux 3 DSK 1' },
+		{ id: '000031', label: 'Aux 3 DSK 2' },
+	],
+
 	CHOICES_TRANSITION_TYPES: [
 		{ id: 0, label: 'Mix' },
 		{ id: 1, label: 'Wipe' },

@@ -16,14 +16,14 @@ module.exports = {
 				label: 'IP Address',
 				width: 6,
 				default: '192.168.0.1',
-				regex: Regex.IP
+				regex: Regex.IP,
 			},
 			{
 				type: 'textinput',
 				id: 'password',
 				label: 'Password',
 				width: 6,
-				default: '0000'
+				default: '0000',
 			},
 			/*{
 				type: 'number',
@@ -38,7 +38,7 @@ module.exports = {
 				type: 'checkbox',
 				id: 'verbose',
 				label: 'Enable Verbose Logging',
-				default: false
+				default: false,
 			},
 			{
 				type: 'static-text',
@@ -55,5 +55,5 @@ module.exports = {
 				isVisible: (configValues) => configValues.verbose === true,
 			},
 		]
-	}
+	},
 }

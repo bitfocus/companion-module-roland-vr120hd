@@ -21,10 +21,6 @@
 		"entrypoint": "../index.js"
 	},
 	"manufacturer": "Roland",
-	"products": [
-		"VR-120HD"
-	],
-	"keywords": [
-		"Video Switcher"
-	]
+	"products": ["VR-120HD"],
+	"keywords": ["Video Switcher"]
 }

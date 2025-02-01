@@ -5,8 +5,8 @@ module.exports = {
 	// #### Define Feedbacks ####
 	// ##########################
 	initFeedbacks: function () {
-		let self = this;
-		let feedbacks = {};
+		let self = this
+		let feedbacks = {}
 
 		const foregroundColor = combineRgb(255, 255, 255) // White
 		const backgroundColorRed = combineRgb(255, 0, 0) // Red
@@ -59,6 +59,6 @@ module.exports = {
 			}
 		}*/
 
-		this.setFeedbackDefinitions(feedbacks);
-	}
+		this.setFeedbackDefinitions(feedbacks)
+	},
 }

@@ -24,15 +24,15 @@ class vr120hdInstance extends InstanceBase {
 			...variables,
 			...presets,
 			...constants,
-			...utils
+			...utils,
 		})
 
-		this.socket = undefined;
+		this.socket = undefined
 
-		this.INTERVAL = null; //used for polling device for feedbacks
+		this.INTERVAL = null //used for polling device for feedbacks
 
-		this.MODEL = '';
-		this.VERSION = '';
+		this.MODEL = ''
+		this.VERSION = ''
 	}
 
 	async destroy() {
@@ -58,7 +58,7 @@ class vr120hdInstance extends InstanceBase {
 			delete this.INTERVAL
 		}
 		this.config = config
-		
+
 		this.initActions()
 		this.initFeedbacks()
 		this.initVariables()
@@ -66,7 +66,6 @@ class vr120hdInstance extends InstanceBase {
 
 		this.init_tcp()
 	}
-	
 }
 
 runEntrypoint(vr120hdInstance, UpgradeScripts)

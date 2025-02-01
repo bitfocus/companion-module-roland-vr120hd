@@ -3,8 +3,8 @@ module.exports = {
 	// #### Define Variables ####
 	// ##########################
 	initVariables: function () {
-		let self = this;
-		let variables = [];
+		let self = this
+		let variables = []
 
 		//variables.push({ name: 'model', label: 'Model' });
 		//variables.push({ name: 'version', label: 'Version' });
@@ -20,12 +20,11 @@ module.exports = {
 	// #### Check Variables ####
 	// #########################
 	checkVariables: function () {
-		let self = this;
+		let self = this
 
 		try {
 			//self.setVariable('model', self.MODEL);
 			//self.setVariable('version', self.VERSION);
-
 			/*for (let i = 0; i < self.TALLYDATA.length; i++) {
 				let state = 'Off';
 
@@ -38,9 +37,8 @@ module.exports = {
 
 				self.setVariable('tally_' + self.TALLYDATA[i].shortlabel, state);
 			}*/
+		} catch (error) {
+			self.log('error', 'Error setting Variables from Device: ' + String(error))
 		}
-		catch(error) {
-			self.log('error', 'Error setting Variables from Device: ' + String(error));
-		}
-	}
+	},
 }

@@ -8,7 +8,8 @@ module.exports = {
 				id: 'info',
 				width: 12,
 				label: 'Information',
-				value: 'This module controls a Roland VR-120HD',
+				value:
+					'This module controls a Roland VR-120HD. You must set the password on the VR-120HD in order to make a connection. [MENU] Button > “Network” > “LAN Setup” > Use the [VALUE] knob to select “Network Password”, and press the [VALUE] knob. The Network Password screen appears.',
 			},
 			{
 				type: 'textinput',

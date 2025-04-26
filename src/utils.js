@@ -134,7 +134,7 @@ module.exports = {
 			self.updateStatus(InstanceStatus.Ok)
 			self.log('info', 'Authenticated.')
 			self.sendRawCommand('VER') //request version info
-			//self.startInterval(); //request tally states
+			self.startInterval() //request tally states
 			//self.subscribeToTally(); //request tally changes
 		} else if (data.trim() == 'ERR:0;') {
 			//an error with something that it received
@@ -175,9 +175,10 @@ module.exports = {
 
 												let value = dataSuffix[1]
 
-												/*if (param1 == '0C' && param2 == '00') { //tally message
-													self.updateTally(param3, value);
-												}*/
+												if (param1 == '0C' && param2 == '00') {
+													//tally message
+													self.updateTally(param3, value)
+												}
 
 												if (param1 == '0C' && param2 == '00' && param3 == '00') {
 													//subscribe tally message
@@ -212,6 +213,50 @@ module.exports = {
 			} catch (error) {
 				self.log('error', 'Error parsing incoming data: ' + error)
 				self.log('error', 'Data: ' + data)
+			}
+		}
+	},
+
+	startInterval: function () {
+		let self = this
+
+		if (self.config.polling) {
+			self.log('info', `Starting Update Interval: Fetching new data from Device every ${self.config.pollingrate}ms.`)
+			if (self.config.pollingrate === undefined) {
+				self.config.pollingrate = 1000
+			}
+
+			self.INTERVAL = setInterval(self.getData.bind(this), parseInt(self.config.pollingrate))
+		} else {
+			self.log('info', 'Polling is disabled. Module will not request new data at a regular rate.')
+		}
+	},
+
+	getData: function () {
+		let self = this
+
+		self.getTallyData()
+	},
+
+	getTallyData: function () {
+		let self = this
+
+		for (let i = 0; i < 36; i++) {
+			let hex = i.toString(16).padStart(2, '0').toUpperCase()
+			let command = '0C' + '00' + hex + ',000001;'
+
+			self.sendRawCommand('RQH:' + command)
+		}
+	},
+
+	updateTally: function (input, value) {
+		let self = this
+
+		let tallyId = parseInt(input, 16)
+
+		for (let i = 0; i < self.TALLYDATA.length; i++) {
+			if (self.TALLYDATA[i].id == tallyId) {
+				self.TALLYDATA[i].status = parseInt(value, 16)
 			}
 		}
 	},

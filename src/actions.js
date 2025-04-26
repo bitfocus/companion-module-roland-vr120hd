@@ -115,6 +115,40 @@ module.exports = {
 			},
 		}
 
+		actions.aux_link = {
+			name: 'Aux Link to PGM',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Aux',
+					id: 'aux',
+					default: '02015D',
+					choices: [
+						{ id: '02015D', label: 'Aux 1' },
+						{ id: '02015E', label: 'Aux 2' },
+						{ id: '02015F', label: 'Aux 3' },
+					],
+				},
+				{
+					type: 'dropdown',
+					label: 'Link',
+					id: 'link',
+					default: 0,
+					choices: [
+						{ id: 0, label: 'Off' },
+						{ id: 1, label: 'On' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let address = options.aux
+
+				let value = options.link.toString(16).padStart(2, '0').toUpperCase()
+				self.sendCommand(address, value)
+			},
+		}
+
 		actions.pnpkey_enable = {
 			name: 'PnP & Key Enable/Disable',
 			options: [

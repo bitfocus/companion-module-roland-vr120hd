@@ -13,7 +13,7 @@ module.exports = {
 		const backgroundColorGreen = combineRgb(0, 255, 0) // Green
 		const backgroundColorOrange = combineRgb(255, 102, 0) // Orange
 
-		/*feedbacks.tally = {
+		feedbacks.tally = {
 			type: 'boolean',
 			label: 'Tally State',
 			description: 'Indicate if Input Channel is in Preview or Program',
@@ -27,7 +27,7 @@ module.exports = {
 					label: 'Input Channel',
 					id: 'input',
 					default: self.TALLYDATA[0].id,
-					choices: self.TALLYDATA
+					choices: self.TALLYDATA,
 				},
 				{
 					type: 'dropdown',
@@ -36,28 +36,28 @@ module.exports = {
 					default: 'program',
 					choices: [
 						{ id: 'preview', label: 'Preview' },
-						{ id: 'program', label: 'Program' }
-					]
-				}
+						{ id: 'program', label: 'Program' },
+					],
+				},
 			],
 			callback: function (feedback, bank) {
-				let opt = feedback.options;
+				let opt = feedback.options
 
-				let tallyObj = self.TALLYDATA.find((obj) => obj.id == opt.input);
+				let tallyObj = self.TALLYDATA.find((obj) => obj.id == opt.input)
 
 				if (tallyObj) {
 					if ((tallyObj.status == 1 || tallyObj.status == 3) && opt.state == 'program') {
-						return true;
+						return true
 					}
 
 					if (tallyObj.status == 2 && opt.state == 'preview') {
-						return true;
+						return true
 					}
 				}
 
 				return false
-			}
-		}*/
+			},
+		}
 
 		this.setFeedbackDefinitions(feedbacks)
 	},

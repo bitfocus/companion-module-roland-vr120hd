@@ -115,8 +115,8 @@ actions.pinp_on_off = {
   },
 };
 
-actions.pinp_adjust = {
-  name: 'PinP Adjust (Position / Size / Cropping)',
+actions.pinp_Settings = {
+  name: 'PinP Settings',
   options: [
     {
       type: 'dropdown',
@@ -184,18 +184,9 @@ actions.pinp_adjust = {
   },
 };
 
-actions.dsk_mode_External_key_setup = {
-    name: 'DSK Mode - External Key - Setup',
+actions.dsk_on_off = {
+    name: 'DSK ON/OFF',
     options: [
-		       {
-            type: 'dropdown',
-            label: 'Mode',
-            id: 'mode',
-            default: 2,
-            choices: [
-                { id: 2, label: 'External Key' }
-            ],
-        },
         {
             type: 'dropdown',
             label: 'DSK Channel',
@@ -203,7 +194,7 @@ actions.dsk_mode_External_key_setup = {
             default: self.CHOICES_DSK[0].id,
             choices: self.CHOICES_DSK,
         },
-		{
+        {
             type: 'dropdown',
             label: 'PGM State',
             id: 'pgm_state',
@@ -222,6 +213,39 @@ actions.dsk_mode_External_key_setup = {
                 { id: 0, label: 'Off' },
                 { id: 1, label: 'On' }
             ],
+        },
+    ],
+    callback: async function (action) {
+        let { dsk, pgm_state, pvw_state } = action.options;
+
+        let dskHex = Number(dsk).toString(16).padStart(2, '0').toUpperCase();
+        let pgmHex = Number(pgm_state).toString(16).padStart(2, '0').toUpperCase();
+        let pvwHex = Number(pvw_state).toString(16).padStart(2, '0').toUpperCase();
+
+        self.sendCommand('00' + dskHex + '01', pgmHex); // PGM
+        self.sendCommand('00' + dskHex + '02', pvwHex); // PVW
+    },
+};
+
+
+actions.dsk_mode_External_key_setup = {
+    name: 'DSK Mode - External Key - Setup',
+    options: [
+		       {
+            type: 'dropdown',
+            label: 'Mode',
+            id: 'mode',
+            default: 2,
+            choices: [
+                { id: 2, label: 'External Key' }
+            ],
+        },
+        {
+            type: 'dropdown',
+            label: 'DSK Channel',
+            id: 'dsk',
+            default: self.CHOICES_DSK[0].id,
+            choices: self.CHOICES_DSK,
         },
         {
             type: 'dropdown',
@@ -324,26 +348,6 @@ actions.dsk_mode_alpha_key_setup = {
             default: self.CHOICES_DSK[0].id,
             choices: self.CHOICES_DSK,
         },
-		       {
-            type: 'dropdown',
-            label: 'PGM State',
-            id: 'pgm_state',
-            default: 1,
-            choices: [
-                { id: 0, label: 'Off' },
-                { id: 1, label: 'On' }
-            ],
-        },
-        {
-            type: 'dropdown',
-            label: 'PVW State',
-            id: 'pvw_state',
-            default: 0,
-            choices: [
-                { id: 0, label: 'Off' },
-                { id: 1, label: 'On' }
-            ],
-        },
         {
             type: 'dropdown',
             label: 'Key Source',
@@ -432,26 +436,6 @@ actions.dsk_mode_self_key_setup = {
             id: 'dsk',
             default: self.CHOICES_DSK[0].id,
             choices: self.CHOICES_DSK,
-        },
-		        {
-            type: 'dropdown',
-            label: 'PGM State',
-            id: 'pgm_state',
-            default: 1,
-            choices: [
-                { id: 0, label: 'Off' },
-                { id: 1, label: 'On' }
-            ],
-        },
-        {
-            type: 'dropdown',
-            label: 'PVW State',
-            id: 'pvw_state',
-            default: 0,
-            choices: [
-                { id: 0, label: 'Off' },
-                { id: 1, label: 'On' }
-            ],
         },
         {
             type: 'dropdown',

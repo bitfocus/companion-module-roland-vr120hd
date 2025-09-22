@@ -16,7 +16,7 @@ module.exports = {
 				id: 'host',
 				label: 'IP Address',
 				width: 6,
-				default: '192.168.0.1',
+				default: '',
 				regex: Regex.IP,
 			},
 			{

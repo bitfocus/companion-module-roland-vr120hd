@@ -185,14 +185,17 @@ actions.pinp_Settings = {
 };
 
 actions.dsk_on_off = {
-    name: 'DSK ON/OFF',
+    name: 'DSK On/Off',
     options: [
         {
             type: 'dropdown',
             label: 'DSK Channel',
             id: 'dsk',
-            default: self.CHOICES_DSK[0].id,
-            choices: self.CHOICES_DSK,
+            default: 0x19, // DSK 1 by default
+            choices: [
+                { id: 0x19, label: 'DSK 1' },
+                { id: 0x1A, label: 'DSK 2' }
+            ],
         },
         {
             type: 'dropdown',
@@ -216,97 +219,14 @@ actions.dsk_on_off = {
         },
     ],
     callback: async function (action) {
-        let { dsk, pgm_state, pvw_state } = action.options;
+        let dsk = Number(action.options.dsk);
+        let pgm_state = Number(action.options.pgm_state);
+        let pvw_state = Number(action.options.pvw_state);
 
-        let dskHex = Number(dsk).toString(16).padStart(2, '0').toUpperCase();
-        let pgmHex = Number(pgm_state).toString(16).padStart(2, '0').toUpperCase();
-        let pvwHex = Number(pvw_state).toString(16).padStart(2, '0').toUpperCase();
-
-        self.sendCommand('00' + dskHex + '01', pgmHex); // PGM
-        self.sendCommand('00' + dskHex + '02', pvwHex); // PVW
-    },
-};
-
-
-actions.dsk_mode_External_key_setup = {
-    name: 'DSK Mode - External Key - Setup',
-    options: [
-		       {
-            type: 'dropdown',
-            label: 'Mode',
-            id: 'mode',
-            default: 2,
-            choices: [
-                { id: 2, label: 'External Key' }
-            ],
-        },
-        {
-            type: 'dropdown',
-            label: 'DSK Channel',
-            id: 'dsk',
-            default: self.CHOICES_DSK[0].id,
-            choices: self.CHOICES_DSK,
-        },
-        {
-            type: 'dropdown',
-            label: 'Fill Source',
-            id: 'fill',
-            default: self.CHOICES_PINP_KEYS_INPUTSASSIGN[0].id,
-            choices: self.CHOICES_PINP_KEYS_INPUTSASSIGN,
-        },
-        {
-            type: 'dropdown',
-            label: 'Key Source',
-            id: 'key',
-            default: self.CHOICES_PINP_KEYS_INPUTSASSIGN[0].id,
-            choices: self.CHOICES_PINP_KEYS_INPUTSASSIGN,
-        },
-        {
-            type: 'number',
-            label: 'Time (sec, 0.0–4.0)',
-            id: 'time',
-            min: 0,
-            max: 4,
-            step: 0.1,
-            default: 1,
-            required: true,
-            tooltip: 'Transition time in seconds (0.0–4.0)'
-        },
-    ],
-    callback: async function (action) {
-        let options = action.options;
-
-        let dsk = Number(options.dsk);
-        let mode = Number(options.mode);
-        let fill = Number(options.fill);
-        let key = Number(options.key);
-        let pgm_state = Number(options.pgm_state);
-        let pvw_state = Number(options.pvw_state);
-        let time = Number(options.time);
-
-        // Convert to hex for protocol
+        // Convert to hex
         let dskHex = dsk.toString(16).padStart(2, '0').toUpperCase();
-        let modeHex = mode.toString(16).padStart(2, '0').toUpperCase();
-        let fillHex = fill.toString(16).padStart(2, '0').toUpperCase();
-        let keyHex = key.toString(16).padStart(2, '0').toUpperCase();
         let pgmHex = pgm_state.toString(16).padStart(2, '0').toUpperCase();
         let pvwHex = pvw_state.toString(16).padStart(2, '0').toUpperCase();
-        let timeVal = Math.round(time * 10);
-        if (timeVal < 0) timeVal = 0;
-        if (timeVal > 40) timeVal = 40;
-        let timeHex = timeVal.toString(16).padStart(2, '0').toUpperCase();
-
-        // Send Mode
-        let addressMode = '00' + dskHex + '03';
-        self.sendCommand(addressMode, modeHex);
-
-        // Send Fill Source
-        let addressFill = '00' + dskHex + '05';
-        self.sendCommand(addressFill, fillHex);
-
-        // Send Key Source
-        let addressKey = '00' + dskHex + '04';
-        self.sendCommand(addressKey, keyHex);
 
         // Send PGM State
         let addressPGM = '00' + dskHex + '01';
@@ -316,31 +236,16 @@ actions.dsk_mode_External_key_setup = {
         let addressPVW = '00' + dskHex + '02';
         self.sendCommand(addressPVW, pvwHex);
 
-        // Send Time
-        let addressTime = '00' + dskHex + '00';
-        self.sendCommand(addressTime, timeHex);
-
         // Debug logging (optional)
-        console.log('[DSK Mode - External Key] Sent:', {
-            dsk, mode, fill, key, pgm_state, pvw_state, time,
-            addressMode, modeHex, addressFill, fillHex, addressKey, keyHex,
-            addressPGM, pgmHex, addressPVW, pvwHex, addressTime, timeHex
+        console.log('[DSK On/Off] Sent:', {
+            dsk, pgm_state, pvw_state, addressPGM, pgmHex, addressPVW, pvwHex
         });
     },
 };
 
-actions.dsk_mode_alpha_key_setup = {
-    name: 'DSK Mode - Alpha Key - Setup',
+actions.dsk_mode_alpha_key = {
+    name: 'DSK Mode - Alpha Key',
     options: [
-		        {
-            type: 'dropdown',
-            label: 'Mode',
-            id: 'mode',
-            default: 1,
-            choices: [
-                { id: 1, label: 'Alpha Key' },
-            ],
-        },
         {
             type: 'dropdown',
             label: 'DSK Channel',
@@ -350,9 +255,15 @@ actions.dsk_mode_alpha_key_setup = {
         },
         {
             type: 'dropdown',
+            label: 'Mode',
+            id: 'mode',
+            default: 1,
+            choices: [{ id: 1, label: 'Alpha Key' }],
+        },
+        {
+            type: 'dropdown',
             label: 'Key Source',
             id: 'key',
-            // Only allow "Still" sources (id: 12 to 27) from CHOICES_PINP_KEYS_INPUTSASSIGN
             default: 12,
             choices: self.CHOICES_PINP_KEYS_INPUTSASSIGN.filter(src => src.label.startsWith('Still')),
         },
@@ -365,71 +276,25 @@ actions.dsk_mode_alpha_key_setup = {
             step: 0.1,
             default: 1,
             required: true,
-            tooltip: 'Transition time in seconds (0.0–4.0)'
         },
     ],
     callback: async function (action) {
-        let options = action.options;
+        let { dsk, mode, key, time } = action.options;
 
-        let dsk = Number(options.dsk);
-        let mode = Number(options.mode);
-        let key = Number(options.key);
-        let pgm_state = Number(options.pgm_state);
-        let pvw_state = Number(options.pvw_state);
-        let time = Number(options.time);
+        let dskHex = Number(dsk).toString(16).padStart(2, '0').toUpperCase();
+        let modeHex = Number(mode).toString(16).padStart(2, '0').toUpperCase();
+        let keyHex = Number(key).toString(16).padStart(2, '0').toUpperCase();
+        let timeHex = Math.round(time * 10).toString(16).padStart(2, '0').toUpperCase();
 
-        // Convert to hex for protocol
-        let dskHex = dsk.toString(16).padStart(2, '0').toUpperCase();
-        let modeHex = mode.toString(16).padStart(2, '0').toUpperCase();
-        let keyHex = key.toString(16).padStart(2, '0').toUpperCase();
-        let pgmHex = pgm_state.toString(16).padStart(2, '0').toUpperCase();
-        let pvwHex = pvw_state.toString(16).padStart(2, '0').toUpperCase();
-        let timeVal = Math.round(time * 10);
-        if (timeVal < 0) timeVal = 0;
-        if (timeVal > 40) timeVal = 40;
-        let timeHex = timeVal.toString(16).padStart(2, '0').toUpperCase();
-
-        // Send Mode
-        let addressMode = '00' + dskHex + '03';
-        self.sendCommand(addressMode, modeHex);
-
-        // Send Key Source
-        let addressKey = '00' + dskHex + '04';
-        self.sendCommand(addressKey, keyHex);
-
-        // Send PGM State
-        let addressPGM = '00' + dskHex + '01';
-        self.sendCommand(addressPGM, pgmHex);
-
-        // Send PVW State
-        let addressPVW = '00' + dskHex + '02';
-        self.sendCommand(addressPVW, pvwHex);
-
-        // Send Time
-        let addressTime = '00' + dskHex + '00';
-        self.sendCommand(addressTime, timeHex);
-
-        // Debug logging (optional)
-        console.log('[DSK Mode - Alpha Key] Sent:', {
-            dsk, mode, key, pgm_state, pvw_state, time,
-            addressMode, modeHex, addressKey, keyHex,
-            addressPGM, pgmHex, addressPVW, pvwHex, addressTime, timeHex
-        });
+        self.sendCommand('00' + dskHex + '03', modeHex);
+        self.sendCommand('00' + dskHex + '04', keyHex);
+        self.sendCommand('00' + dskHex + '00', timeHex);
     },
 };
 
-actions.dsk_mode_self_key_setup = {
-    name: 'DSK Mode - Self Key - Setup',
+actions.dsk_mode_self_key = {
+    name: 'DSK Mode - Self Key',
     options: [
-		        {
-            type: 'dropdown',
-            label: 'Mode',
-            id: 'mode',
-            default: 0,
-            choices: [
-                { id: 0, label: 'Self Key' },
-            ],
-        },
         {
             type: 'dropdown',
             label: 'DSK Channel',
@@ -439,12 +304,19 @@ actions.dsk_mode_self_key_setup = {
         },
         {
             type: 'dropdown',
+            label: 'Mode',
+            id: 'mode',
+            default: 0,
+            choices: [{ id: 0, label: 'Self Key' }],
+        },
+        {
+            type: 'dropdown',
             label: 'Fill Source',
             id: 'fill',
             default: self.CHOICES_PINP_KEYS_INPUTSASSIGN[0].id,
             choices: self.CHOICES_PINP_KEYS_INPUTSASSIGN,
         },
-		       {
+        {
             type: 'number',
             label: 'Time (sec, 0.0–4.0)',
             id: 'time',
@@ -453,59 +325,87 @@ actions.dsk_mode_self_key_setup = {
             step: 0.1,
             default: 1,
             required: true,
-            tooltip: 'Transition time in seconds (0.0–4.0)'
         },
     ],
     callback: async function (action) {
-        let options = action.options;
+        let { dsk, mode, fill, time } = action.options;
 
-        let dsk = Number(options.dsk);
-        let mode = Number(options.mode);
-        let fill = Number(options.fill);
-        let pgm_state = Number(options.pgm_state);
-        let pvw_state = Number(options.pvw_state);
-        let time = Number(options.time);
+        let dskHex = Number(dsk).toString(16).padStart(2, '0').toUpperCase();
+        let modeHex = Number(mode).toString(16).padStart(2, '0').toUpperCase();
+        let fillHex = Number(fill).toString(16).padStart(2, '0').toUpperCase();
+        let timeHex = Math.round(time * 10).toString(16).padStart(2, '0').toUpperCase();
 
-        // Convert to hex for protocol
-        let dskHex = dsk.toString(16).padStart(2, '0').toUpperCase();
-        let modeHex = mode.toString(16).padStart(2, '0').toUpperCase();
-        let fillHex = fill.toString(16).padStart(2, '0').toUpperCase();
-        let pgmHex = pgm_state.toString(16).padStart(2, '0').toUpperCase();
-        let pvwHex = pvw_state.toString(16).padStart(2, '0').toUpperCase();
+        self.sendCommand('00' + dskHex + '03', modeHex);
+        self.sendCommand('00' + dskHex + '05', fillHex);
+        self.sendCommand('00' + dskHex + '00', timeHex);
+    },
+};
+
+
+actions.dsk_mode_external_key = {
+    name: 'DSK Mode - External Key',
+    options: [
+        {
+            type: 'dropdown',
+            label: 'DSK Channel',
+            id: 'dsk',
+            default: self.CHOICES_DSK[0].id,
+            choices: self.CHOICES_DSK,
+        },
+        {
+            type: 'dropdown',
+            label: 'Mode',
+            id: 'mode',
+            default: 2,
+            choices: [{ id: 2, label: 'External Key' }],
+        },
+        {
+            type: 'dropdown',
+            label: 'Fill Source',
+            id: 'fill',
+            default: self.CHOICES_PINP_KEYS_INPUTSASSIGN[0].id,
+            choices: self.CHOICES_PINP_KEYS_INPUTSASSIGN,
+        },
+        {
+            type: 'dropdown',
+            label: 'Key Source',
+            id: 'key',
+            default: self.CHOICES_PINP_KEYS_INPUTSASSIGN[0].id,
+            choices: self.CHOICES_PINP_KEYS_INPUTSASSIGN,
+        },
+        {
+            type: 'number',
+            label: 'Time (sec, 0.0–4.0)',
+            id: 'time',
+            min: 0,
+            max: 4,
+            step: 0.1,
+            default: 1,
+            required: true,
+        },
+    ],
+    callback: async function (action) {
+        let { dsk, mode, fill, key, time } = action.options;
+
+        // Convert values to hex
+        let dskHex = Number(dsk).toString(16).padStart(2, '0').toUpperCase();
+        let modeHex = Number(mode).toString(16).padStart(2, '0').toUpperCase();
+        let fillHex = Number(fill).toString(16).padStart(2, '0').toUpperCase();
+        let keyHex = Number(key).toString(16).padStart(2, '0').toUpperCase();
         let timeVal = Math.round(time * 10);
         if (timeVal < 0) timeVal = 0;
         if (timeVal > 40) timeVal = 40;
         let timeHex = timeVal.toString(16).padStart(2, '0').toUpperCase();
 
-        // Send Mode
-        let addressMode = '00' + dskHex + '03';
-        self.sendCommand(addressMode, modeHex);
-
-        // Send Fill Source
-        let addressFill = '00' + dskHex + '05';
-        self.sendCommand(addressFill, fillHex);
-
-        // Send PGM State
-        let addressPGM = '00' + dskHex + '01';
-        self.sendCommand(addressPGM, pgmHex);
-
-        // Send PVW State
-        let addressPVW = '00' + dskHex + '02';
-        self.sendCommand(addressPVW, pvwHex);
-
-        // Send Time
-        let addressTime = '00' + dskHex + '00';
-        self.sendCommand(addressTime, timeHex);
-
-        // Debug logging (optional)
-        console.log('[DSK Mode - Self Key] Sent:', {
-            dsk, mode, fill, pgm_state, pvw_state, time,
-            addressMode, modeHex, addressFill, fillHex,
-            addressPGM, pgmHex, addressPVW, pvwHex, addressTime, timeHex
-        });
+        // Send commands
+        self.sendCommand('00' + dskHex + '03', modeHex); // Mode
+        self.sendCommand('00' + dskHex + '05', fillHex); // Fill Source
+        self.sendCommand('00' + dskHex + '04', keyHex);  // Key Source
+        self.sendCommand('00' + dskHex + '00', timeHex); // Transition Time
     },
 };
 
+		
 		actions.run_macro = {
 			name: 'Run Macro',
 			options: [
